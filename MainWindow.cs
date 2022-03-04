@@ -125,5 +125,9 @@ namespace postgres_database_restore_tool
             }
         }
 
+        private void Register_Btn_Click(object sender, EventArgs e)
+        {
+            
+        }
     }
 }

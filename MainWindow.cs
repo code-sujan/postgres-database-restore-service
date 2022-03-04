@@ -142,25 +142,24 @@ namespace postgres_database_restore_tool
                     RestoreFileLocation = TargetLocation.FileName,
                 });
 
-                WorkingStatus.Text = "Restoring...";
+                WorkingStatus.Text = "Restoring and registering...";
                 var bgw = new BackgroundWorker();
                 bgw.DoWork += (object _, DoWorkEventArgs args) =>
                 {
                     CommandExecutor.ExecuteRestore(connection);
-                    var parentDb = "stock_db";
 
                     var userList = GetUserList(connection);
                     if (userList.Count == 0)
                         throw new Exception("Error retrieving user from primary database");
 
-                    CopyUserToParentDb(connection, parentDb, userList);
+                    CopyUserToParentDb(connection, ParentDbElem.Text, userList);
                 };
                 bgw.RunWorkerCompleted += (object _, RunWorkerCompletedEventArgs args) =>
                 {
                     if (args.Error == null)
                     {
                         WorkingStatus.Text = "Completed";
-                        MessageBox.Show($"Database #{DatabaseElem.Text} restored successfully");
+                        MessageBox.Show($"Database #{DatabaseElem.Text} restored and registered to #{ParentDbElem.Text} successfully");
                     }
                     else
                     {

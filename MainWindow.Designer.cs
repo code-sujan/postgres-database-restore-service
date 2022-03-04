@@ -48,6 +48,8 @@
             this.loadingBar = new System.Windows.Forms.ToolStripProgressBar();
             this.loadingLbl = new System.Windows.Forms.ToolStripStatusLabel();
             this.Register_Btn = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.ParentDbElem = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -106,7 +108,7 @@
             // 
             // RestoreBtn
             // 
-            this.RestoreBtn.Location = new System.Drawing.Point(114, 312);
+            this.RestoreBtn.Location = new System.Drawing.Point(262, 192);
             this.RestoreBtn.Name = "RestoreBtn";
             this.RestoreBtn.Size = new System.Drawing.Size(170, 48);
             this.RestoreBtn.TabIndex = 6;
@@ -119,7 +121,7 @@
             // 
             // FileOpenElem
             // 
-            this.FileOpenElem.Location = new System.Drawing.Point(142, 195);
+            this.FileOpenElem.Location = new System.Drawing.Point(139, 196);
             this.FileOpenElem.Name = "FileOpenElem";
             this.FileOpenElem.Size = new System.Drawing.Size(96, 44);
             this.FileOpenElem.TabIndex = 7;
@@ -213,19 +215,36 @@
             // 
             // Register_Btn
             // 
-            this.Register_Btn.Location = new System.Drawing.Point(303, 312);
+            this.Register_Btn.Location = new System.Drawing.Point(199, 335);
             this.Register_Btn.Name = "Register_Btn";
-            this.Register_Btn.Size = new System.Drawing.Size(141, 48);
+            this.Register_Btn.Size = new System.Drawing.Size(180, 48);
             this.Register_Btn.TabIndex = 17;
-            this.Register_Btn.Text = "Register New";
+            this.Register_Btn.Text = "Restore And Register New";
             this.Register_Btn.UseVisualStyleBackColor = true;
             this.Register_Btn.Click += new System.EventHandler(this.Register_Btn_Click);
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(114, 312);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(100, 23);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Parent Db";
+            // 
+            // ParentDbElem
+            // 
+            this.ParentDbElem.Location = new System.Drawing.Point(183, 309);
+            this.ParentDbElem.Name = "ParentDbElem";
+            this.ParentDbElem.Size = new System.Drawing.Size(233, 20);
+            this.ParentDbElem.TabIndex = 19;
             // 
             // PgAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(577, 417);
+            this.Controls.Add(this.ParentDbElem);
+            this.Controls.Add(this.label2);
             this.Controls.Add(this.Register_Btn);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.SelectedFilelbl);
@@ -251,6 +270,9 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox ParentDbElem;
 
         private System.Windows.Forms.Button Register_Btn;
 

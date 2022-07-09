@@ -188,14 +188,26 @@ namespace postgres_database_restore_tool
             var userDatabaseConnectionString = $"Server=localhost; port=5432; Username={connection.UserName}; Password={connection.Password}; Database={parentDb};";
             using (var conn4 = new NpgsqlConnection(userDatabaseConnectionString))
             {
+                var mainUser = conn4.QuerySingle<TempUser>("Select * from public.\"AspNetUsers\" where id = -1");
                 var insertUserIntoInternalTableQuery =
-                    "INSERT INTO public.\"AspNetUsers\"(user_name, normalized_user_name, email, normalized_email, email_confirmed, password_hash, security_stamp, concurrency_stamp, phone_number, phone_number_confirmed, two_factor_enabled, lockout_enabled, access_failed_count, branch_id, rec_by, rec_date, rec_status, user_language, txn_date, gmt, running_date, user_status, is_parent_user, parent_user_id, created_at, updated_at, created_by_user, updated_by_user, is_in_trial, business_name, primary_contact_number, mobile_number, country, state, city, first_name, middle_name, last_name, associated_with_all_branches, user_level)VALUES (@user_name, @normalized_user_name, @email, @normalized_email, @email_confirmed, @password_hash, @security_stamp, @concurrency_stamp, @phone_number, @phone_number_confirmed, @two_factor_enabled, @lockout_enabled, @access_failed_count, @branch_id, @rec_by, @rec_date, @rec_status, @user_language, @txn_date, @gmt, @running_date, @user_status, @is_parent_user, @parent_user_id, @created_at, @updated_at, @created_by_user, @updated_by_user, @is_in_trial, @business_name, @primary_contact_number, @mobile_number, @country, @state, @city, @first_name, @middle_name, @last_name, false, @user_level)";
+                    "INSERT INTO public.\"AspNetUsers\"(user_name, normalized_user_name, email, normalized_email, email_confirmed, password_hash, security_stamp, concurrency_stamp, phone_number, phone_number_confirmed, two_factor_enabled, lockout_enabled, access_failed_count, branch_id, rec_by, rec_date, rec_status, user_language, txn_date, gmt, running_date, user_status, is_parent_user, parent_user_id, created_at, updated_at, created_by_user, updated_by_user, is_in_trial, business_name, primary_contact_number, mobile_number, country, state, city, first_name, middle_name, last_name, associated_with_all_branches, user_level)" +
+                    "VALUES (@user_name, @normalized_user_name, @email, @normalized_email, @email_confirmed, @password_hash, @security_stamp, @concurrency_stamp, @phone_number, @phone_number_confirmed, @two_factor_enabled, @lockout_enabled, @access_failed_count, @branch_id, @rec_by, @rec_date, @rec_status, @user_language, @txn_date, @gmt, @running_date, @user_status, @is_parent_user, @parent_user_id, @created_at, @updated_at, @created_by_user, @updated_by_user, @is_in_trial, @business_name, @primary_contact_number, @mobile_number, @country, @state, @city, @first_name, @middle_name, @last_name, false, @user_level)";
 
                 foreach (var tempUser in userList)
                 {
+                    tempUser.password_hash = mainUser.password_hash;
+                    tempUser.security_stamp = mainUser.security_stamp;
                     if (conn4.ExecuteScalar<bool>("select count(1) from public.\"AspNetUsers\" where email = @email", new { email = tempUser.email }))
                         continue;
+                    tempUser.branch_id = 1;
                     conn4.Execute(insertUserIntoInternalTableQuery, tempUser);
+                }
+
+                var currentParentUserId = userList.Where(x => x.parent_user_id != null).Select(x => x.parent_user_id).FirstOrDefault();
+                if (currentParentUserId != null)
+                {
+                    var parentUser = conn4.QuerySingle("Select * from public.\"AspNetUsers\" where email = @email", new { email = connection.DatabaseName });
+                    conn4.Execute("UPDATE public.\"AspNetUsers\" SET parent_user_id = @real_id WHERE parent_user_id = @current_id", new { real_id = parentUser.id, current_id = currentParentUserId});   
                 }
             }
         }

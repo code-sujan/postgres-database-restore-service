@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
+using System.Net;
+using System.Text.Json;
 using System.Windows.Forms;
 using Dapper;
 using Npgsql;
@@ -46,6 +49,8 @@ namespace postgres_database_restore_tool
 
         private void OnFormLoad(object sender, EventArgs e)
         {
+            var config = GetConfig();
+            PasswordElm.Text = config.Password;
             var commandType = new List<string>()
             {
                 "pg_restore",
@@ -185,7 +190,8 @@ namespace postgres_database_restore_tool
 
         private static void CopyUserToParentDb(UserConnectionVo connection, string parentDb, List<TempUser> userList)
         {
-            var userDatabaseConnectionString = $"Server=localhost; port=5432; Username={connection.UserName}; Password={connection.Password}; Database={parentDb};";
+            var config = GetConfig();
+            var userDatabaseConnectionString = $"Server=localhost; port={config.Port}; Username={connection.UserName}; Password={connection.Password}; Database={parentDb};";
             using (var conn4 = new NpgsqlConnection(userDatabaseConnectionString))
             {
                 var mainUser = conn4.QuerySingle<TempUser>("Select * from public.\"AspNetUsers\" where id = -1");
@@ -212,6 +218,11 @@ namespace postgres_database_restore_tool
             }
         }
 
+        private static AppSettingConfig GetConfig()
+        {
+            return JsonSerializer.Deserialize<AppSettingConfig>(File.ReadAllText("appsettings.json"), new JsonSerializerOptions{PropertyNameCaseInsensitive = true});
+        }
+
         private static List<TempUser> GetUserList(UserConnectionVo connection)
         {
             var connectionString = $"Server=localhost; port=5432; Username={connection.UserName}; Password={connection.Password}; Database={connection.DatabaseName};";
@@ -224,5 +235,11 @@ namespace postgres_database_restore_tool
 
             return userList;
         }
+    }
+
+    internal class AppSettingConfig
+    {
+        public long Port { get; set; }
+        public string Password { get; set; }
     }
 }

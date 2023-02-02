@@ -50,6 +50,8 @@
             this.Register_Btn = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.ParentDbElem = new System.Windows.Forms.TextBox();
+            this.PortLbl = new System.Windows.Forms.Label();
+            this.PortElem = new System.Windows.Forms.TextBox();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -189,7 +191,7 @@
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { this.loadingBar, this.loadingLbl });
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {this.loadingBar, this.loadingLbl});
             this.statusStrip1.Location = new System.Drawing.Point(0, 395);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
@@ -238,11 +240,30 @@
             this.ParentDbElem.Size = new System.Drawing.Size(233, 20);
             this.ParentDbElem.TabIndex = 19;
             // 
+            // PortLbl
+            // 
+            this.PortLbl.AutoSize = true;
+            this.PortLbl.Location = new System.Drawing.Point(147, 23);
+            this.PortLbl.Name = "PortLbl";
+            this.PortLbl.Size = new System.Drawing.Size(35, 13);
+            this.PortLbl.TabIndex = 20;
+            this.PortLbl.Text = "Port : ";
+            // 
+            // PortElem
+            // 
+            this.PortElem.Location = new System.Drawing.Point(183, 16);
+            this.PortElem.Name = "PortElem";
+            this.PortElem.Size = new System.Drawing.Size(233, 20);
+            this.PortElem.TabIndex = 21;
+            this.PortElem.UseWaitCursor = true;
+            // 
             // PgAdmin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(577, 417);
+            this.Controls.Add(this.PortElem);
+            this.Controls.Add(this.PortLbl);
             this.Controls.Add(this.ParentDbElem);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Register_Btn);
@@ -270,6 +291,11 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Label PortLbl;
+
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox PortElem;
 
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox ParentDbElem;

@@ -50,6 +50,7 @@ namespace postgres_database_restore_tool
         private void OnFormLoad(object sender, EventArgs e)
         {
             var config = GetConfig();
+            PortElem.Text = config.Port.ToString();
             PasswordElm.Text = config.Password;
             var commandType = new List<string>()
             {
@@ -91,6 +92,7 @@ namespace postgres_database_restore_tool
 
                 var connection = UserConnectionValidator.ValidateConnection(new UserConnectionVo()
                 {
+                    Port = PortElem.Text,
                     UserName = UserNameElm.Text,
                     Password = PasswordElm.Text,
                     DatabaseName = DatabaseElem.Text,
@@ -139,6 +141,7 @@ namespace postgres_database_restore_tool
 
                 var connection = UserConnectionValidator.ValidateConnection(new UserConnectionVo()
                 {
+                    Port = PortElem.Text,
                     UserName = UserNameElm.Text,
                     Password = PasswordElm.Text,
                     DatabaseName = DatabaseElem.Text,
@@ -190,8 +193,7 @@ namespace postgres_database_restore_tool
 
         private static void CopyUserToParentDb(UserConnectionVo connection, string parentDb, List<TempUser> userList)
         {
-            var config = GetConfig();
-            var userDatabaseConnectionString = $"Server=localhost; port={config.Port}; Username={connection.UserName}; Password={connection.Password}; Database={parentDb};";
+            var userDatabaseConnectionString = $"Server=localhost; port={connection.Port}; Username={connection.UserName}; Password={connection.Password}; Database={parentDb};";
             using (var conn4 = new NpgsqlConnection(userDatabaseConnectionString))
             {
                 var mainUser = conn4.QuerySingle<TempUser>("Select * from public.\"AspNetUsers\" where id = -1");
@@ -225,7 +227,7 @@ namespace postgres_database_restore_tool
 
         private static List<TempUser> GetUserList(UserConnectionVo connection)
         {
-            var connectionString = $"Server=localhost; port=5432; Username={connection.UserName}; Password={connection.Password}; Database={connection.DatabaseName};";
+            var connectionString = $"Server=localhost; port={connection.Port}; Username={connection.UserName}; Password={connection.Password}; Database={connection.DatabaseName};";
             List<TempUser> userList;
             using (var parentConnection = new NpgsqlConnection(connectionString))
             {

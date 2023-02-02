@@ -8,6 +8,6 @@
         public string RestoreFileLocation { get; set; }
         public string DatabaseBackupType { get; set; }
         public string ActionTypeValue { get; set; }
-        
+        public string Port { get; set; }
     }
 }
